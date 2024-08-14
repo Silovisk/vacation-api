@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class IndexVacationPlanRequest extends FormRequest
 {
@@ -33,5 +35,30 @@ class IndexVacationPlanRequest extends FormRequest
             'per_page.min' => 'The per_page field must be at least 1.',
             'per_page.max' => 'The per_page field must not be greater than 100.',
         ];
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator(Validator $validator)
+    {
+
+    }
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors()
+        ], 422));
     }
 }
