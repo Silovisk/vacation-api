@@ -19,7 +19,7 @@ class CustomAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check()) {
+        if (!auth('sanctum')->check()) {
 
             Log::warning('Attempt to access unauthorized endpoint.', [
                 'ip' => $request->ip(),
