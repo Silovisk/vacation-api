@@ -61,7 +61,6 @@ class VacationPlanService
         }
 
         return $this->vacationPlanRepository->getVacationPlanById($id);
-        ;
     }
 
 
