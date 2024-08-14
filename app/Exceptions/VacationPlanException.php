@@ -19,6 +19,11 @@ class VacationPlanException extends Exception
         return $this->statusCode;
     }
 
+    public static function noDataAvailable()
+    {
+        return new self("No vacation plan data available.");
+    }
+
     public static function notFound(): self
     {
         return new self('Vacation plan not found.', 404);
