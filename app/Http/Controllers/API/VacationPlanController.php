@@ -27,7 +27,28 @@ class VacationPlanController extends BaseController
      */
     public function index(IndexVacationPlanRequest $request)
     {
+        try {
+            $perPage = $request->get('per_page', 15);
+            $vacationPlans = $this->vacationPlanService->getAllVacationPlans($perPage);
 
+            return VacationPlanResource::collection($vacationPlans);
+        } catch (VacationPlanException $e) {
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                500
+            );
+        }
     }
 
     /**
@@ -35,30 +56,41 @@ class VacationPlanController extends BaseController
      */
     public function store(StoreVacationPlanRequest $request)
     {
-        //
+        try {
+            $vacationPlan = $this->vacationPlanService->createVacationPlan($request->validated());
+            return (new VacationPlanResource($vacationPlan))->response()->setStatusCode(201);
+        } catch (VacationPlanException $e) {
+            return $e->render($request);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(VacationPlan $vacationPlan)
+    public function show($id)
     {
-        //
+        Log::info('$id: ' . print_r($id, true));
+        Log::info('in ' . __FILE__ . ' on line ' . __LINE__);
+
+        $vacationPlan = $this->vacationPlanService->getVacationPlanById($id);
+        return new VacationPlanResource($vacationPlan);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVacationPlanRequest $request, VacationPlan $vacationPlan)
+    public function update(UpdateVacationPlanRequest $request, $id)
     {
-        //
+        $vacationPlan = $this->vacationPlanService->updateVacationPlan($id, $request->validated());
+        return new VacationPlanResource($vacationPlan);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VacationPlan $vacationPlan)
+    public function destroy($id)
     {
-        //
+        $vacationPlan = $this->vacationPlanService->destroyVacationPlan($id);
+        return $vacationPlan;
     }
 }
