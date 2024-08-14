@@ -41,7 +41,7 @@ class VacationPlanRepository implements VacationPlanRepositoryInterface
      */
     public function getVacationPlanById($id)
     {
-        return $this->vacationPlan->findOrFail($id);
+        return $this->vacationPlan->find($id);
     }
 
     /**
