@@ -11,10 +11,17 @@ use App\Http\Requests\UpdateVacationPlanRequest;
 use App\Services\VacationPlanService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class VacationPlanController extends BaseController
 {
+    public function __construct
+    (
+        private VacationPlanService $vacationPlanService,
+    )
+    {
 
+    }
     /**
      * Display a listing of the resource.
      */
