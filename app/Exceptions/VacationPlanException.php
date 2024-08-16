@@ -21,7 +21,7 @@ class VacationPlanException extends Exception
 
     public static function noDataAvailable()
     {
-        return new self("No vacation plan data available.");
+        return new self("No vacation plan data available.", 404);
     }
 
     public static function notFound(): self
