@@ -1,66 +1,838 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Vacation Plan API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Environment Setup POSTMAN
 
-## About Laravel
+Create an environment in Postman with the following variables:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   **Variable:** `BASE_URL`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    -   **Value:** `http://localhost/api` (or the base URL of your API)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Variable:** `TOKEN`
+    -   **Value:** (will be automatically set after login)
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Base URL
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```
+http://127.0.0.1:8000/api
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Endpoints Authentication
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+### 1. Register
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+-   **Endpoint:** `POST /register`
+-   **Description:** Registers a new user.
+-   **Request URL:** `{{BASE_URL}}/register`
+-   **Request Method:** `POST`
 
-## Contributing
+#### Request Body
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```json
+{
+    "name": "test",
+    "email": "test@example.com",
+    "password": "test123",
+    "c_password": "test123"
+}
+```
 
-## Code of Conduct
+#### Response
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   **Status Code:** 200 OK
 
-## Security Vulnerabilities
+##### Success Response
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+{
+    "success": true,
+    "data": {
+        "token": "1|BQ5Oig805mgGtLgW8K11bJt7YAHIiDqfbdzqvqjsc79b0512",
+        "name": "test"
+    },
+    "message": "User registered successfully."
+}
+```
 
-## License
+##### Error Response (Validation Error)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```json
+{
+    "success": false,
+    "data": {
+        "name": ["The name field is required."],
+        "email": [
+            "The email field is required.",
+            "The email must be a valid email address."
+        ],
+        "password": ["The password field is required."],
+        "c_password": [
+            "The c password field is required.",
+            "The c password confirmation does not match."
+        ]
+    },
+    "message": "Validation Error."
+}
+```
+
+### 2. Login
+
+-   **Endpoint:** `POST /login`
+-   **Description:** Logs in an existing user.
+-   **Request URL:** `{{BASE_URL}}/login`
+-   **Request Method:** `POST`
+
+#### Request Body
+
+```json
+{
+    "email": "test@example.com",
+    "password": "test123"
+}
+```
+
+#### Response
+
+-   **Status Code:** 200 OK
+
+##### Success Response
+
+```json
+{
+    "success": true,
+    "data": {
+        "token": "3|3b5ibxmD427artIbOzS1HRdMYM3081YlyHNk28mD77392c5d",
+        "name": "test"
+    },
+    "message": "User logged in successfully."
+}
+```
+
+##### Error Response (Unauthorized)
+
+```json
+{
+    "success": false,
+    "data": {
+        "error": "Unauthorized"
+    },
+    "message": "Unauthorized."
+}
+```
+
+## Authentication
+
+### Storing Token
+
+To store the login token for use in other requests, add the following script in the **"Tests"** tab of the login request in Postman:
+
+```txt
+Script POSTMAN
+```
+
+```javascript
+// Get the BASE_URL environment variable
+var baseUrl = pm.environment.get("BASE_URL");
+
+var requestConfig = {
+    method: "POST",
+    url: baseUrl + "/login",
+    header: "Content-Type: application/json",
+    body: {
+        mode: "raw",
+        raw: JSON.stringify({
+            email: "test@example.com",
+            password: "test123",
+        }),
+    },
+};
+
+pm.sendRequest(requestConfig, function (err, response) {
+    if (err) {
+        console.error("Request error:", err);
+    } else {
+        if (response.code === 200) {
+            var responseBody = response.json();
+            var token = responseBody.data.token;
+            pm.environment.set("TOKEN", token);
+        } else {
+            console.error("Failed to login. Response code:", response.code);
+            console.error("Response body:", response.body);
+        }
+    }
+});
+```
+
+# Endpoints Vacation Plan
+
+### 1. Create a New Holiday Plan
+
+-   **Endpoint:** `POST /vacation-plan`
+-   **Description:** Creates a new holiday plan.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan`
+-   **Request Method:** `POST`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@store`
+
+#### Response Examples
+
+##### Example 1: date format error
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "title": "New Vacation Plan",
+    "description": "Description of the vacation plan",
+    "date": "2024-08-1",
+    "location": "Destination City",
+    "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "date": ["The date field must match the format Y-m-d."]
+    }
+}
+```
+
+##### Example 1: Unauthorized
+
+-   **Status:** 401 Unauthorized
+-   **Request Body:**
+
+```json
+{
+    "title": "New Vacation Plan",
+    "description": "Description of the vacation plan",
+    "date": "2024-08-16",
+    "location": "Destination City",
+    "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "message": "Unauthorized access. Please authenticate.",
+    "error": true
+}
+```
+
+##### Example 2: Unprocessable Entity (Missing Fields)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "title": ["The title field is required."],
+        "description": ["The description field is required."],
+        "date": ["The date field is required."],
+        "location": ["The location field is required."]
+    }
+}
+```
+
+##### Example 3: Unprocessable Entity (Invalid Data Types)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "title": 123,
+    "description": 123,
+    "date": "string",
+    "location": 123,
+    "participants": 123
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "title": ["The title field must be a string."],
+        "description": ["The description field must be a string."],
+        "date": ["The date field must be a valid date."],
+        "location": ["The location field must be a string."],
+        "participants": ["The participants field must be an array."]
+    }
+}
+```
+
+##### Example 4: Unprocessable Entity (Field Length Exceeded)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "title": "A very long title exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...",
+    "description": "Description of the vacation plan",
+    "date": "2024-08-16",
+    "location": "A very long location name exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...exceeding the maximum length of 255 characters...",
+    "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "title": ["The title field must not be greater than 255 characters."],
+        "location": [
+            "The location field must not be greater than 255 characters."
+        ]
+    }
+}
+```
+
+##### Example 5: Success
+
+-   **Status:** 200 OK
+-   **Request Body:**
+
+```json
+{
+    "title": "New Vacation Plan",
+    "description": "Description of the vacation plan",
+    "date": "2024-08-16",
+    "location": "Destination City",
+    "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "New Vacation Plan",
+        "description": "Description of the vacation plan",
+        "date": "2024-08-16",
+        "location": "Destination City",
+        "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+    },
+    "message": "Vacation Plan create successfully."
+}
+```
+
+### 2. Retrieve All Holiday Plans
+
+-   **Endpoint:** `GET /vacation-plan`
+-   **Description:** Retrieves a list of all holiday plans.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan`
+-   **Request Method:** `GET`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@index`
+
+#### Response Examples
+
+##### Example 1: Retrieve All Holiday Plans
+
+-   **Request Body:**
+-   **per_page** (optional): Number of items per page (default: 15)
+
+```json
+{
+    "per_page": 5
+}
+```
+
+-   **Response:**
+-   **Status Code:** 200 OK
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "title": "Et et voluptatum quae aut necessitatibus.",
+            "description": "Ipsa ullam natus repellendus beatae. Quas non excepturi quam nobis.",
+            "date": "2017-05-22",
+            "location": "Gradyfurt",
+            "participants": ["Dave", "Charlie", "Alice", "Bob", "Eve"]
+        },
+        {
+            "id": 2,
+            "title": "Qui necessitatibus consequatur ut aut dicta aut.",
+            "description": "Eos officia laborum dolores officiis. Ducimus ipsum quia neque quaerat voluptatem aspernatur et. Ut suscipit qui ducimus incidunt.",
+            "date": "2019-10-25",
+            "location": "Rosinaberg",
+            "participants": ["Bob", "Alice", "Charlie", "Dave", "Eve"]
+        },
+        {
+            "id": 3,
+            "title": "Et sint tenetur impedit sint odio.",
+            "description": "Quo repudiandae itaque non aliquid et et. Magni debitis qui aut voluptate et mollitia ipsum. Alias veniam non ut enim. Eligendi tempora iure sapiente sit provident.",
+            "date": "2006-02-24",
+            "location": "Pourosville",
+            "participants": ["Charlie", "Bob", "Eve"]
+        },
+        {
+            "id": 4,
+            "title": "Aut nihil impedit distinctio omnis optio commodi veniam.",
+            "description": "Quia voluptate quaerat porro quibusdam quis inventore ipsam. Et et ratione sit. Natus quos voluptates est voluptates.",
+            "date": "2010-03-10",
+            "location": "Joelbury",
+            "participants": ["Eve"]
+        },
+        {
+            "id": 5,
+            "title": "Ipsa dicta doloribus consectetur eligendi magnam quam ea.",
+            "description": "Praesentium neque qui maxime deleniti. Dolorum aut expedita qui ullam ducimus fuga perferendis repellendus. Dolorem voluptates cumque nesciunt consequuntur eos aut eos. Consequatur excepturi quos voluptas temporibus est. Ut qui corporis iure omnis iste voluptas dolores.",
+            "date": "1973-04-27",
+            "location": "West Sadyeport",
+            "participants": ["Alice", "Charlie", "Eve"]
+        }
+    ],
+    "links": {
+        "first": "http://127.0.0.1:8000/api/vacation-plan?page=1",
+        "last": "http://127.0.0.1:8000/api/vacation-plan?page=300",
+        "prev": null,
+        "next": "http://127.0.0.1:8000/api/vacation-plan?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 300,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=2",
+                "label": "2",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=3",
+                "label": "3",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=4",
+                "label": "4",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=5",
+                "label": "5",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=6",
+                "label": "6",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=7",
+                "label": "7",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=8",
+                "label": "8",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=9",
+                "label": "9",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=10",
+                "label": "10",
+                "active": false
+            },
+            {
+                "url": null,
+                "label": "...",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=299",
+                "label": "299",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=300",
+                "label": "300",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8000/api/vacation-plan?page=2",
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://127.0.0.1:8000/api/vacation-plan",
+        "per_page": 5,
+        "to": 5,
+        "total": 1500
+    }
+}
+```
+
+##### Example 2: No Data Available
+
+-   **Status:** 404 Not Found
+-   **Request Body:**
+
+```json
+{
+    "per_page": 5
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "success": false,
+    "message": "No vacation plan data available."
+}
+```
+
+##### Example 3: Invalid per_page Value (Not an Integer)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "per_page": "abc"
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "per_page": ["The per page must be an integer."]
+    }
+}
+```
+
+#### Example 4: Invalid per_page Value (Less than 1)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "per_page": 0
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "per_page": ["The per page must be at least 1."]
+    }
+}
+```
+
+#### Example 5: Invalid per_page Value (Greater than 100)
+
+-   **Status:** 422 Unprocessable Content
+-   **Request Body:**
+
+```json
+{
+    "per_page": 101
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "per_page": ["The per page may not be greater than 100."]
+    }
+}
+```
+
+### 3. Retrieve a Specific Holiday Plan by ID
+
+-   **Endpoint:** `GET /vacation-plan/{id}`
+-   **Description:** Retrieves a specific holiday plan by its ID.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan/{id}`
+-   **Request Method:** `GET`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@show`
+
+#### Response Examples
+
+#### Example 1: Retrieve a Specific Holiday Plan by ID (Success)
+
+-   **Status:** 200 OK
+-   **Request URL:**
+
+```txt
+GET: http://127.0.0.1:8000/api/vacation-plan/1
+```
+
+-   **Response:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "New Vacation Plan",
+        "description": "Description of the vacation plan",
+        "date": "2024-08-16",
+        "location": "Destination City",
+        "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+    },
+    "message": "Vacation plan retrieved successfully."
+}
+```
+
+#### Example 2: Holiday Plan Not Found
+
+-   **Status:** 404 Not Found
+-   **Request URL:**
+
+```txt
+GET: http://127.0.0.1:8000/api/vacation-plan/0
+```
+
+-   **Response:**
+
+```json
+{
+    "success": false,
+    "message": "Vacation plan not found."
+}
+```
+
+### 4. Update an Existing Holiday Plan
+
+-   **Endpoint:** `PUT /vacation-plan/{id}`
+-   **Description:** Updates an existing holiday plan by its ID.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan/{id}`
+-   **Request Method:** `PUT` or `PATCH`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@update`
+
+-   **Note:** You can use either `PUT` or `PATCH` method to update a holiday plan. `PUT` method will replace the entire resource with the new data, while `PATCH` method will update only the specified fields.
+
+#### Response Examples
+
+#### Example 1: Update a Holiday Plan (Success) - PATCH Method
+-  **Status:** 200 OK
+-  **Request URL:**
+```txt
+PATCH: http://127.0.0.1:8000/api/vacation-plan/1
+```
+
+-   **Request Body:**
+
+```json
+{
+    "title": "Updated Vacation Plan Title"
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "Updated Vacation Plan Title",
+        "description": "Description of the vacation plan",
+        "date": "2024-08-16",
+        "location": "Destination City",
+        "participants": ["Alice", "Bob", "Charlie", "Dave", "Eve"]
+    },
+    "message": "Vacation Plan update successfully."
+}
+```
+
+#### Example 2: Update a Holiday Plan (Success) - PUT Method
+-  **Status:** 200 OK
+-  **Request URL:**
+```txt
+PUT: http://127.0.0.1:8000/api/vacation-plan/1
+```
+
+-   **Request Body:**
+
+```json
+{
+    "title": "Updated Vacation Plan Title",
+    "description": "Updated Description of the vacation plan",
+    "date": "2024-08-17",
+    "location": "Updated Destination City",
+    "participants": ["Frank"]
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "Updated Vacation Plan Title",
+        "description": "Updated Description of the vacation plan",
+        "date": "2024-08-17",
+        "location": "Updated Destination City",
+        "participants": ["Frank"]
+    },
+    "message": "Vacation Plan update successfully."
+}
+```
+
+#### Example 3: Update a Holiday Plan (Not Found)
+-  **Status:** 404 Not Found
+-  **Request URL:**
+```txt
+PUT: http://127.0.0.1:8000/api/vacation-plan/0
+```
+
+-   **Request Body:**
+
+```json
+{
+    "title": "Updated Vacation Plan Title"
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "success": false,
+    "message": "Vacation plan not found."
+}
+```
+
+#### Example 6: Invalid Request Body (Invalid Data Types)
+-  **Status:** 422 Unprocessable Content
+-  **Request URL:**
+```txt
+PUT: http://127.0.0.1:8000/api/vacation-plan/1
+```
+
+-   **Request Body:**
+
+```json
+{
+    "title": 123,
+    "description": 123,
+    "date": "2024/08/17",
+    "location": 123,
+    "participants": "Frank"
+}
+```
+
+-   **Response:**
+
+```json
+{
+    "form-errors": {
+        "title": [
+            "The title field must be a string."
+        ],
+        "description": [
+            "The description field must be a string."
+        ],
+        "date": [
+            "The date field must match the format Y-m-d."
+        ],
+        "location": [
+            "The location field must be a string."
+        ],
+        "participants": [
+            "The participants field must be an array."
+        ]
+    }
+}
+```
+
+
+### 5. Delete a Holiday Plan
+
+-   **Endpoint:** `DELETE /vacation-plan/{id}`
+-   **Description:** Deletes a specific holiday plan by its ID.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan/{id}`
+-   **Request Method:** `DELETE`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@destroy`
+
+
+#### Response Examples
+
+#### Example 1: Delete a Holiday Plan (Success)
+-  **Status:** 200 OK
+-  **Request URL:**
+```txt
+DELETE: http://127.0.0.1:8000/api/vacation-plan/1
+```
+
+-   **Response:**
+
+```json
+{
+    "success": true,
+    "data": [],
+    "message": "Vacation Plan delete successfully."
+}
+```
+
+#### Example 2: Delete a Holiday Plan (Not Found)
+-  **Status:** 404 Not Found
+-  **Request URL:**
+```txt
+DELETE: http://127.0.0.1:8000/api/vacation-plan/0
+```
+
+-   **Response:**
+
+```json
+{
+    "success": false,
+    "message": "Vacation plan not found."
+}
+```
+
+### 6. Generate PDF for a Specific Holiday Plan
