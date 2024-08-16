@@ -13,6 +13,6 @@ class VacationPlanSeeder extends Seeder
      */
     public function run()
     {
-        VacationPlan::factory()->count(100)->create();
+        VacationPlan::factory()->count(1500)->create();
     }
 }
