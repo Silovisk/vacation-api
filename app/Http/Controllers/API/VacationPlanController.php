@@ -58,9 +58,27 @@ class VacationPlanController extends BaseController
     {
         try {
             $vacationPlan = $this->vacationPlanService->createVacationPlan($request->validated());
-            return (new VacationPlanResource($vacationPlan))->response()->setStatusCode(201);
+
+            return $this->sendResponse(
+                new VacationPlanResource($vacationPlan),
+                'Vacation Plan create successfully.'
+            );
         } catch (VacationPlanException $e) {
-            return $e->render($request);
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                500
+            );
         }
     }
 
@@ -69,11 +87,30 @@ class VacationPlanController extends BaseController
      */
     public function show($id)
     {
-        Log::info('$id: ' . print_r($id, true));
-        Log::info('in ' . __FILE__ . ' on line ' . __LINE__);
+        try {
+            $vacationPlan = $this->vacationPlanService->getVacationPlanById($id);
 
-        $vacationPlan = $this->vacationPlanService->getVacationPlanById($id);
-        return new VacationPlanResource($vacationPlan);
+            return $this->sendResponse(
+                new VacationPlanResource($vacationPlan),
+                'Vacation plan retrieved successfully.'
+            );
+        } catch (VacationPlanException $e) {
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                500
+            );
+        }
     }
 
     /**
@@ -81,8 +118,30 @@ class VacationPlanController extends BaseController
      */
     public function update(UpdateVacationPlanRequest $request, $id)
     {
-        $vacationPlan = $this->vacationPlanService->updateVacationPlan($id, $request->validated());
-        return new VacationPlanResource($vacationPlan);
+        try {
+            $vacationPlan = $this->vacationPlanService->updateVacationPlan($id, $request->validated());
+
+            return $this->sendResponse(
+                new VacationPlanResource($vacationPlan),
+                'Vacation Plan update successfully.'
+            );
+        } catch (VacationPlanException $e) {
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                500
+            );
+        }
     }
 
     /**
@@ -90,7 +149,29 @@ class VacationPlanController extends BaseController
      */
     public function destroy($id)
     {
-        $vacationPlan = $this->vacationPlanService->destroyVacationPlan($id);
-        return $vacationPlan;
+        try {
+            $vacationPlan = $this->vacationPlanService->destroyVacationPlan($id);
+
+            return $this->sendResponse(
+                [],
+                'Vacation Plan delete successfully.'
+            );
+        } catch (VacationPlanException $e) {
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                500
+            );
+        }
     }
 }
