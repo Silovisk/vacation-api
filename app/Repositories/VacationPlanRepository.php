@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\VacationPlan;
 use App\Repositories\Contracts\VacationPlanRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 
 class VacationPlanRepository implements VacationPlanRepositoryInterface
 {
@@ -50,9 +51,9 @@ class VacationPlanRepository implements VacationPlanRepositoryInterface
      * @param array $vacationPlan
      * @return bool
      */
-    public function updateVacationPlan(int $id, array $vacationPlan)
+    public function updateVacationPlan(object $existingVacationPlan, array $vacationPlan)
     {
-        return $this->getVacationPlanById($id)->update($vacationPlan);
+        return $existingVacationPlan->update($vacationPlan);
     }
 
     /**
@@ -60,9 +61,9 @@ class VacationPlanRepository implements VacationPlanRepositoryInterface
      * @param int $id
      * @return bool|null
      */
-    public function destroyVacationPlan(int $id)
+    public function destroyVacationPlan(object $existingVacationPlan)
     {
-        return $this->getVacationPlanById($id)->delete();
+        return $existingVacationPlan->delete();
     }
 
 }

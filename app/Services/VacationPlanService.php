@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\VacationPlanException;
 use App\Repositories\VacationPlanRepository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class VacationPlanService
@@ -54,13 +55,13 @@ class VacationPlanService
             throw VacationPlanException::notFound();
         }
 
-        $updated = $this->vacationPlanRepository->updateVacationPlan($id, $vacationPlan);
+        $updated = $this->vacationPlanRepository->updateVacationPlan($existingVacationPlan, $vacationPlan);
 
         if (!$updated) {
             throw VacationPlanException::notUpdated();
         }
 
-        return $this->vacationPlanRepository->getVacationPlanById($id);
+        return $existingVacationPlan;
     }
 
 
@@ -72,7 +73,7 @@ class VacationPlanService
             throw VacationPlanException::notFound();
         }
 
-        $deleted = $this->vacationPlanRepository->destroyVacationPlan($id);
+        $deleted = $this->vacationPlanRepository->destroyVacationPlan($existingVacationPlan);
 
         if (!$deleted) {
             throw VacationPlanException::notDeleted();
