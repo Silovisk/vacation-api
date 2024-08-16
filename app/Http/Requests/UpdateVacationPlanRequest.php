@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdateVacationPlanRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateVacationPlanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,19 @@ class UpdateVacationPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'string|max:255',
+            'description' => 'string',
+            'date' => 'date_format:Y-m-d',
+            'location' => 'string|max:255',
+            'participants' => 'array',
+            'participants.*' => 'string'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'form-errors' => $validator->errors()
+        ], 422));
     }
 }
