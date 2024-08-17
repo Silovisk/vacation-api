@@ -3,12 +3,13 @@
 namespace App\Exceptions;
 
 use Exception;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class VacationPlanException extends Exception
 {
     protected $statusCode;
 
-    public function __construct(string $message, int $statusCode = 500)
+    public function __construct(string $message, int $statusCode = SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;
@@ -21,27 +22,27 @@ class VacationPlanException extends Exception
 
     public static function noDataAvailable()
     {
-        return new self("No vacation plan data available.", 404);
+        return new self("No vacation plan data available.", SymfonyResponse::HTTP_NOT_FOUND);
     }
 
     public static function notFound(): self
     {
-        return new self('Vacation plan not found.', 404);
+        return new self('Vacation plan not found.', SymfonyResponse::HTTP_NOT_FOUND);
     }
 
     public static function notCreated(): self
     {
-        return new self('Vacation plan not created.', 400);
+        return new self('Vacation plan not created.', SymfonyResponse::HTTP_BAD_REQUEST);
     }
 
     public static function notUpdated(): self
     {
-        return new self('Vacation plan not updated.', 400);
+        return new self('Vacation plan not updated.', SymfonyResponse::HTTP_BAD_REQUEST);
     }
 
     public static function notDeleted(): self
     {
-        return new self('Vacation plan not deleted.', 500);
+        return new self('Vacation plan not deleted.', SymfonyResponse::HTTP_BAD_REQUEST);
     }
 
     public function render($request)
