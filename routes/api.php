@@ -15,5 +15,5 @@ Route::middleware('auth-api')->group( function () {
     Route::get('/teste', function (Request $request) {
         return 'teste';
     });
-    Route::resource('vacation-plan', VacationPlanController::class);
+    Route::apiResource('vacation-plan', VacationPlanController::class);
 });
