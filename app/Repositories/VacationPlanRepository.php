@@ -18,7 +18,6 @@ class VacationPlanRepository implements VacationPlanRepositoryInterface
     /**
      * Get all vacation plans with pagination
      * @param int $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getAllVacationPlans($perPage)
     {
