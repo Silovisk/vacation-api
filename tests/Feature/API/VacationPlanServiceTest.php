@@ -21,7 +21,7 @@ class VacationPlanServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->vacationPlanRepository = Mockery::mock(VacationPlanRepository::class);
+        $this->vacationPlanRepository = $this->mock(VacationPlanRepository::class);
         $this->vacationPlanService = new VacationPlanService($this->vacationPlanRepository);
     }
 
@@ -266,5 +266,5 @@ class VacationPlanServiceTest extends TestCase
         $this->vacationPlanService->destroyVacationPlan($id);
     }
 
-    
+
 }
