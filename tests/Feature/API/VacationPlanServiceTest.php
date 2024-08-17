@@ -7,6 +7,8 @@ use App\Models\VacationPlan;
 use App\Repositories\VacationPlanRepository;
 use App\Services\VacationPlanService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Mockery;
 use Tests\TestCase;
 
@@ -35,7 +37,13 @@ class VacationPlanServiceTest extends TestCase
     {
         $perPage = 10;
         $vacationPlans = VacationPlan::factory()->count(5)->make();
-        $paginatedVacationPlans = $vacationPlans;
+        $paginatedVacationPlans = new LengthAwarePaginator(
+            $vacationPlans,
+            $vacationPlans->count(),
+            $perPage,
+            Paginator::resolveCurrentPage(),
+            ['path' => Paginator::resolveCurrentPath()]
+        );
 
         // Configure o mock para retornar dados
         $this->vacationPlanRepository
