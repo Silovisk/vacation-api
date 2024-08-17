@@ -12,6 +12,7 @@ use App\Services\VacationPlanService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class VacationPlanController extends BaseController
 {
@@ -46,7 +47,7 @@ class VacationPlanController extends BaseController
             return $this->sendError(
                 'An unexpected error occurred.',
                 [],
-                500
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -61,7 +62,8 @@ class VacationPlanController extends BaseController
 
             return $this->sendResponse(
                 new VacationPlanResource($vacationPlan),
-                'Vacation Plan create successfully.'
+                'Vacation Plan create successfully.',
+                SymfonyResponse::HTTP_CREATED
             );
         } catch (VacationPlanException $e) {
             Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
@@ -77,7 +79,7 @@ class VacationPlanController extends BaseController
             return $this->sendError(
                 'An unexpected error occurred.',
                 [],
-                500
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -108,7 +110,7 @@ class VacationPlanController extends BaseController
             return $this->sendError(
                 'An unexpected error occurred.',
                 [],
-                500
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -139,7 +141,7 @@ class VacationPlanController extends BaseController
             return $this->sendError(
                 'An unexpected error occurred.',
                 [],
-                500
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -154,7 +156,8 @@ class VacationPlanController extends BaseController
 
             return $this->sendResponse(
                 [],
-                'Vacation Plan delete successfully.'
+                'Vacation Plan delete successfully.',
+                SymfonyResponse::HTTP_NO_CONTENT
             );
         } catch (VacationPlanException $e) {
             Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
@@ -170,7 +173,7 @@ class VacationPlanController extends BaseController
             return $this->sendError(
                 'An unexpected error occurred.',
                 [],
-                500
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
