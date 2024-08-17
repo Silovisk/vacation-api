@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\API;
 
 use App\Models\VacationPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
