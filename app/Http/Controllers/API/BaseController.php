@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class BaseController extends Controller
 {
@@ -12,7 +13,7 @@ class BaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendResponse($result, $message)
+    public function sendResponse($result, $message, $status = SymfonyResponse::HTTP_OK)
     {
         $response = [
             'success' => true,
@@ -20,7 +21,7 @@ class BaseController extends Controller
             'message' => $message,
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, $status);
     }
 
     /**
