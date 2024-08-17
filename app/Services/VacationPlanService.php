@@ -6,6 +6,7 @@ use App\Exceptions\VacationPlanException;
 use App\Repositories\VacationPlanRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class VacationPlanService
 {
@@ -15,7 +16,7 @@ class VacationPlanService
     ) {
     }
 
-    public function getAllVacationPlans($perPage)
+    public function getAllVacationPlans($perPage): LengthAwarePaginator
     {
         $vacationPlans = $this->vacationPlanRepository->getAllVacationPlans($perPage);
 
