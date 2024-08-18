@@ -9,6 +9,7 @@ use App\Exceptions\AuthException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class AuthController extends BaseController
 {
