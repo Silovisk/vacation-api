@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use PDF;
 
 class VacationPlanController extends BaseController
 {
@@ -177,4 +178,35 @@ class VacationPlanController extends BaseController
             );
         }
     }
+
+    /**
+     * Generate a PDF for the specified resource.
+     */
+    public function generatePDF($id)
+    {
+        try {
+            $vacationPlan = $this->vacationPlanService->getVacationPlanById($id);
+
+            $pdf = PDF::loadView('API.pdf.vacation_plan', ['vacationPlan' => $vacationPlan]);
+
+            return $pdf->download('vacation_plan_' . $id . '.pdf');
+        } catch (VacationPlanException $e) {
+            Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);
+
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                $e->getStatusCode()
+            );
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return $this->sendError(
+                'An unexpected error occurred.',
+                [],
+                SymfonyResponse::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
 }
