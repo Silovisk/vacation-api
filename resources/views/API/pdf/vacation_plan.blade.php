@@ -137,9 +137,13 @@
         <section class="participants">
             <h2>Participants</h2>
             <ul>
-                @foreach ($vacationPlan->participants as $participant)
-                    <li>{{ $participant }}</li>
-                @endforeach
+                @if(isset($vacationPlan->participants) && count($vacationPlan->participants) > 0)
+                    @foreach ($vacationPlan->participants as $participant)
+                        <li>{{ $participant }}</li>
+                    @endforeach
+                @else
+                    <li>No participants</li>
+                @endif
             </ul>
         </section>
     </div>
