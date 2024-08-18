@@ -1,17 +1,234 @@
 # Vacation Plan API Documentation
 
-### Environment Setup POSTMAN
+## Introduction
 
-Create an environment in Postman with the following variables:
+This is a Laravel API project that provides endpoints to manage vacation plans. The API allows users to create, retrieve, update, and delete holiday plans. The API also provides an endpoint to generate a PDF file for a specific holiday plan.
 
--   **Variable:** `BASE_URL`
+## Features
 
-    -   **Value:** `http://localhost/api` (or the base URL of your API)
+-   **User Authentication**: Register and login users using Sanctum.
+-   **Holiday Plan Management**: Create, retrieve all, retrieve specific id, update, and delete holiday plans.
+-   **PDF Generation**: Generate a PDF file for a specific holiday plan.
 
--   **Variable:** `TOKEN`
-    -   **Value:** (will be automatically set after login)
+## Technologies
 
-# Endpoints Authentication using Sanctum (Bearer Token)
+-   **Laravel 11**: PHP framework for building web applications.
+-   **MySQL**: Relational database management system.
+-   **Sanctum**: Laravel package for API token authentication.
+-   **DOMPDF**: PHP library for generating PDF files.
+
+# Project Structure
+
+The project follows the standard Laravel application structure. Here are the key features and functionalities used:
+
+## Key Features
+
+1. **Form Requests**:
+   - Used for validating request data, keeping controllers cleaner.
+
+2. **Exceptions**:
+   - Error handling configured for user-friendly responses and custom exception management.
+
+3. **Tests**:
+   - Implemented using PHPUnit to ensure the correct functionality of features, including integration and unit tests.
+
+4. **Middleware**:
+   - Applied for authentication and authorization, filtering requests as needed.
+
+5. **Resources**:
+   - Used to format API responses in JSON consistently.
+
+6. **Providers**:
+   - **Service Providers** were used to register the **Repository** and **RepositoryInterface**, facilitating dependency injection.
+
+## Usage of Service, Repository, and RepositoryInterface
+
+- **Repository and RepositoryInterface**:
+  - Implemented to separate data access logic from business logic, promoting a clean and modular architecture.
+
+- **Service**:
+  - Layer that encapsulates business logic and interacts with repositories, maintaining a well-organized application.
+
+
+
+
+
+# Project Setup and Configuration Local Machine and Docker
+
+## Configuration Steps for Project Setup on Local Machine
+
+### Prerequisites
+
+-   **PHP 8.2 or 8.3**  
+    [Download PHP](https://www.php.net/downloads.php)  
+    Ensure the following extensions are enabled in `php.ini`:
+
+    ```ini
+    extension=curl
+    extension=fileinfo
+    extension=mbstring
+    extension=openssl
+    extension=pdo_mysql
+    extension=pdo_sqlite
+    extension=sodium
+    extension=zip
+    ```
+
+-   **Composer (Recommended Latest: v2.7.7)**  
+    [Download Composer](https://getcomposer.org/download/)
+
+-   **MySQL**  
+    [MySQL Installation on Windows](https://www.w3schools.com/mysql/mysql_install_windows.asp)
+
+-   **Other Alternatives for PHP and MySQL**:
+
+    -   XAMPP
+    -   WampServer
+
+-   **Tools for Testing Requests**:
+
+    -   Postman
+    -   Insomnia
+
+-   **Other Tools**:
+    -   **[Laravel Kit](https://tmdh.github.io/laravel-kit/)**: A collection of tools and resources for Laravel developers.
+    -   **Laravel Telescope**: An elegant debug assistant for the Laravel framework.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Silovisk/vacation-api.git
+cd vacation-api
+```
+
+### 2. Install Dependencies
+
+```bash
+composer install
+```
+
+### 3. Create a Copy of the `.env` File
+
+```bash
+cp .env.example .env
+```
+
+### 4. Configure the Database
+
+Open the `.env` file and set the database configuration:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=name_database
+DB_USERNAME=user
+DB_PASSWORD=password
+```
+
+### 5. Generate an Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Run the Migrations
+
+```bash
+php artisan migrate
+```
+
+### 7. Run the Seeder
+
+```bash
+php artisan db:seed
+```
+
+### 8. Run the Tests
+
+```bash
+php artisan test
+```
+
+### 9. Start the Application (Development)
+
+```bash
+php artisan serve
+```
+
+## Configuration Steps for Project Setup on Local Machine Using Docker
+
+### Prerequisites
+
+-   **PHP and Composer**
+-   **Docker**  
+    [Install Docker](https://docs.docker.com/engine/install/)  
+    Recommended: [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### 1. Clone the Repository in Linux Distro or Windows WSL
+
+```bash
+git clone https://github.com/Silovisk/vacation-api.git
+cd vacation-api
+```
+
+### 2. Install Laravel Sail
+
+```bash
+composer require laravel/sail --dev
+php artisan sail:install
+```
+
+### Configuring a Shell Alias
+
+[Configure a Shell Alias](https://laravel.com/docs/11.x/sail#configuring-a-shell-alias)
+
+### 3. Initialize Containers
+
+```bash
+sail up
+```
+
+### 4. Install Dependencies
+
+```bash
+sail composer install
+```
+
+### 5. Create a Copy of the `.env` File
+
+```bash
+cp .env.example .env
+```
+
+### 6. Configure the Database
+
+Open the `.env` file and set the database configuration:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=vacation_plan_api
+DB_USERNAME=sail
+DB_PASSWORD=password
+```
+
+### 7. Generate an Application Key
+
+```bash
+sail artisan key:generate
+```
+
+### 8. Run the Migrations
+
+```bash
+sail artisan migrate
+```
+
+# API Endpoints Documentation
+
+## Endpoints Authentication using Sanctum (Bearer Token)
 
 ### 1. Register User
 
@@ -169,7 +386,7 @@ pm.sendRequest(requestConfig, function (err, response) {
 });
 ```
 
-# Endpoints Vacation Plan
+## Endpoints Vacation Plan
 
 ### 1. Create a New Holiday Plan
 
