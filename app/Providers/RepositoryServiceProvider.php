@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\{
-    VacationPlanRepositoryInterface
+    VacationPlanRepositoryInterface,
+    AuthRepositoryInterface
 };
 use App\Repositories\{
-    VacationPlanRepository
+    VacationPlanRepository,
+    AuthRepository
 };
 
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +23,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             VacationPlanRepositoryInterface::class,
             VacationPlanRepository::class
+        );
+
+        $this->app->bind(
+            AuthRepositoryInterface::class,
+            AuthRepository::class
         );
     }
 
