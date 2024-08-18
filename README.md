@@ -11,25 +11,23 @@ Create an environment in Postman with the following variables:
 -   **Variable:** `TOKEN`
     -   **Value:** (will be automatically set after login)
 
+# Endpoints Authentication using Sanctum (Bearer Token)
 
-## Base URL
-
-```
-http://127.0.0.1:8000/api
-```
-
-# Endpoints Authentication
-
-
-
-### 1. Register
+### 1. Register User
 
 -   **Endpoint:** `POST /register`
 -   **Description:** Registers a new user.
--   **Request URL:** `{{BASE_URL}}/register`
+-   **Request URL:** `http://127.0.0.1:8000/api/register`
 -   **Request Method:** `POST`
+-   **Authentication:** `Not Required`
+-   **Controller Action** `AuthController@register`
 
-#### Request Body
+#### Response Examples
+
+##### Example 1: Register User (Success)
+
+-   **Status:** 200 OK
+-   **Request Body:**
 
 ```json
 {
@@ -40,11 +38,7 @@ http://127.0.0.1:8000/api
 }
 ```
 
-#### Response
-
--   **Status Code:** 200 OK
-
-##### Success Response
+-   **Response:**
 
 ```json
 {
@@ -62,11 +56,12 @@ http://127.0.0.1:8000/api
 ```json
 {
     "success": false,
-    "data": {
+    "errors": {
         "name": ["The name field is required."],
         "email": [
             "The email field is required.",
-            "The email must be a valid email address."
+            "The email must be a valid email address.",
+            "The email has already been taken."
         ],
         "password": ["The password field is required."],
         "c_password": [
@@ -82,10 +77,17 @@ http://127.0.0.1:8000/api
 
 -   **Endpoint:** `POST /login`
 -   **Description:** Logs in an existing user.
--   **Request URL:** `{{BASE_URL}}/login`
+-   **Request URL:** `http://127.0.0.1:8000/api/login`
 -   **Request Method:** `POST`
+-   **Authentication:** `Not Required`
+-   **Controller Action** `AuthController@login`
 
-#### Request Body
+#### Response Examples
+
+##### Example 1: Login (Success)
+
+-   **Status:** 200 OK
+-   **Request Body:**
 
 ```json
 {
@@ -94,11 +96,7 @@ http://127.0.0.1:8000/api
 }
 ```
 
-#### Response
-
--   **Status Code:** 200 OK
-
-##### Success Response
+-   **Response:**
 
 ```json
 {
@@ -111,26 +109,31 @@ http://127.0.0.1:8000/api
 }
 ```
 
-##### Error Response (Unauthorized)
+##### Example 2: Login (Invalid Credentials)
+
+-   **Status:** 401 Unauthorized
+-   **Request Body:**
+
+```json
+{
+    "email": "testNotExisting@example.com",
+    "password": "test123"
+}
+```
+
+-   **Response:**
 
 ```json
 {
     "success": false,
-    "data": {
-        "error": "Unauthorized"
-    },
-    "message": "Unauthorized."
+    "message": "Unauthorized"
 }
 ```
 
-## Authentication
-
 ### Storing Token
 
-To store the login token for use in other requests, add the following script in the **"Tests"** tab of the login request in Postman:
-
 ```txt
-Script POSTMAN
+Script POSTMAN: Vacation Plan API/Auth/Storing Token
 ```
 
 ```javascript
@@ -655,8 +658,10 @@ GET: http://127.0.0.1:8000/api/vacation-plan/0
 #### Response Examples
 
 #### Example 1: Update a Holiday Plan (Success) - PATCH Method
--  **Status:** 200 OK
--  **Request URL:**
+
+-   **Status:** 200 OK
+-   **Request URL:**
+
 ```txt
 PATCH: http://127.0.0.1:8000/api/vacation-plan/1
 ```
@@ -687,8 +692,10 @@ PATCH: http://127.0.0.1:8000/api/vacation-plan/1
 ```
 
 #### Example 2: Update a Holiday Plan (Success) - PUT Method
--  **Status:** 200 OK
--  **Request URL:**
+
+-   **Status:** 200 OK
+-   **Request URL:**
+
 ```txt
 PUT: http://127.0.0.1:8000/api/vacation-plan/1
 ```
@@ -723,8 +730,10 @@ PUT: http://127.0.0.1:8000/api/vacation-plan/1
 ```
 
 #### Example 3: Update a Holiday Plan (Not Found)
--  **Status:** 404 Not Found
--  **Request URL:**
+
+-   **Status:** 404 Not Found
+-   **Request URL:**
+
 ```txt
 PUT: http://127.0.0.1:8000/api/vacation-plan/0
 ```
@@ -747,8 +756,10 @@ PUT: http://127.0.0.1:8000/api/vacation-plan/0
 ```
 
 #### Example 6: Invalid Request Body (Invalid Data Types)
--  **Status:** 422 Unprocessable Content
--  **Request URL:**
+
+-   **Status:** 422 Unprocessable Content
+-   **Request URL:**
+
 ```txt
 PUT: http://127.0.0.1:8000/api/vacation-plan/1
 ```
@@ -770,25 +781,14 @@ PUT: http://127.0.0.1:8000/api/vacation-plan/1
 ```json
 {
     "form-errors": {
-        "title": [
-            "The title field must be a string."
-        ],
-        "description": [
-            "The description field must be a string."
-        ],
-        "date": [
-            "The date field must match the format Y-m-d."
-        ],
-        "location": [
-            "The location field must be a string."
-        ],
-        "participants": [
-            "The participants field must be an array."
-        ]
+        "title": ["The title field must be a string."],
+        "description": ["The description field must be a string."],
+        "date": ["The date field must match the format Y-m-d."],
+        "location": ["The location field must be a string."],
+        "participants": ["The participants field must be an array."]
     }
 }
 ```
-
 
 ### 5. Delete a Holiday Plan
 
@@ -799,12 +799,13 @@ PUT: http://127.0.0.1:8000/api/vacation-plan/1
 -   **Authentication:** `Required`
 -   **Controller Action** `VacationPlanController@destroy`
 
-
 #### Response Examples
 
 #### Example 1: Delete a Holiday Plan (Success)
--  **Status:** 200 OK
--  **Request URL:**
+
+-   **Status:** 200 OK
+-   **Request URL:**
+
 ```txt
 DELETE: http://127.0.0.1:8000/api/vacation-plan/1
 ```
@@ -820,8 +821,10 @@ DELETE: http://127.0.0.1:8000/api/vacation-plan/1
 ```
 
 #### Example 2: Delete a Holiday Plan (Not Found)
--  **Status:** 404 Not Found
--  **Request URL:**
+
+-   **Status:** 404 Not Found
+-   **Request URL:**
+
 ```txt
 DELETE: http://127.0.0.1:8000/api/vacation-plan/0
 ```
@@ -847,18 +850,22 @@ DELETE: http://127.0.0.1:8000/api/vacation-plan/0
 #### Response Examples
 
 #### Example 1: Generate PDF for a Specific Holiday Plan (Success)
--  **Status:** 200 OK
--  **Request URL:**
+
+-   **Status:** 200 OK
+-   **Request URL:**
+
 ```txt
 GET: http://127.0.0.1:8000/api/vacation-plan/1/generate-pdf
 ```
 
--  **Response:**
-The response will be a PDF file download.
+-   **Response:**
+    The response will be a PDF file download.
 
 #### Example 2: Generate PDF for a Specific Holiday Plan (Not Found)
--  **Status:** 404 Not Found
--  **Request URL:**
+
+-   **Status:** 404 Not Found
+-   **Request URL:**
+
 ```txt
 GET: http://127.0.0.1:8000/api/vacation-plan/0/generate-pdf
 ```
