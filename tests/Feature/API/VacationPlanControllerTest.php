@@ -250,4 +250,22 @@ class VacationPlanControllerTest extends TestCase
     }
 
 
+    public function test_can_generate_pdf_for_vacation_plan()
+    {
+        $vacationPlan = VacationPlan::factory()->create();
+
+        $this->vacationPlanService
+            ->shouldReceive('getVacationPlanById')
+            ->with($vacationPlan->id)
+            ->andReturn($vacationPlan);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->authenticate(),
+        ])->getJson('/api/vacation-plan/' . $vacationPlan->id . '/generate-pdf');
+
+        $response->assertStatus(SymfonyResponse::HTTP_OK)
+            ->assertHeader('Content-Type', 'application/pdf')
+            ->assertHeader('Content-Disposition', 'attachment; filename=vacation_plan_' . $vacationPlan->id . '.pdf');
+    }
+
 }
