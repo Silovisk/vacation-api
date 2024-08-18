@@ -12,8 +12,6 @@ Route::controller(RegisterController::class)->group(function(){
 });
 
 Route::middleware('auth-api')->group( function () {
-    Route::get('/teste', function (Request $request) {
-        return 'teste';
-    });
     Route::apiResource('vacation-plan', VacationPlanController::class);
+    Route::get('vacation-plan/{vacationPlan}/generate-pdf', [VacationPlanController::class, 'generatePDF']);
 });
