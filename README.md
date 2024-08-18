@@ -836,3 +836,38 @@ DELETE: http://127.0.0.1:8000/api/vacation-plan/0
 ```
 
 ### 6. Generate PDF for a Specific Holiday Plan
+
+-   **Endpoint:** `GET /vacation-plan/{id}/generate-pdf`
+-   **Description:** Generates a PDF file for a specific holiday plan by its ID.
+-   **Request URL:** `http://127.0.0.1:8000/api/vacation-plan/{id}/generate-pdf`
+-   **Request Method:** `GET`
+-   **Authentication:** `Required`
+-   **Controller Action** `VacationPlanController@generatePdf`
+
+#### Response Examples
+
+#### Example 1: Generate PDF for a Specific Holiday Plan (Success)
+-  **Status:** 200 OK
+-  **Request URL:**
+```txt
+GET: http://127.0.0.1:8000/api/vacation-plan/1/generate-pdf
+```
+
+-  **Response:**
+The response will be a PDF file download.
+
+#### Example 2: Generate PDF for a Specific Holiday Plan (Not Found)
+-  **Status:** 404 Not Found
+-  **Request URL:**
+```txt
+GET: http://127.0.0.1:8000/api/vacation-plan/0/generate-pdf
+```
+
+-   **Response:**
+
+```json
+{
+    "success": false,
+    "message": "Vacation plan not found."
+}
+```
