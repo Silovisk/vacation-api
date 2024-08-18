@@ -15,3 +15,7 @@ Route::middleware('auth-api')->group( function () {
     Route::apiResource('vacation-plan', VacationPlanController::class);
     Route::get('vacation-plan/{vacationPlan}/generate-pdf', [VacationPlanController::class, 'generatePDF']);
 });
+
+Route::get('/', function () {
+    return response()->json(['message' => 'API Vacation Plan is running']);
+});
