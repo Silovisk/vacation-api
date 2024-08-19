@@ -158,7 +158,7 @@ class VacationPlanController extends BaseController
             return $this->sendResponse(
                 [],
                 'Vacation Plan delete successfully.',
-                SymfonyResponse::HTTP_NO_CONTENT
+                SymfonyResponse::HTTP_OK
             );
         } catch (VacationPlanException $e) {
             Log::error($e->getMessage(), ['vacation-plan-exception' => $e]);

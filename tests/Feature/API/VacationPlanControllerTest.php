@@ -149,7 +149,7 @@ class VacationPlanControllerTest extends TestCase
             'Authorization' => 'Bearer ' . $this->authenticate(),
         ])->deleteJson('/api/vacation-plan/' . $vacationPlan->id);
 
-        $response->assertStatus(SymfonyResponse::HTTP_NO_CONTENT);
+        $response->assertStatus(SymfonyResponse::HTTP_OK);
     }
 
 
