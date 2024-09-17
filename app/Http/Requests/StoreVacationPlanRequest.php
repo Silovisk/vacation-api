@@ -26,7 +26,7 @@ class StoreVacationPlanRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'date' => 'required|date_format:Y-m-d',
+            'date' => 'required|date_format:Y-m-d|after_or_equal:today',
             'location' => 'required|string|max:255',
             'participants' => 'array',
             'participants.*' => 'string'
